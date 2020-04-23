@@ -7,9 +7,10 @@ const ingredients = [
   "Приправы",
 ];
 const ul = document.querySelector("#ingredients");
+let liElements = [];
 for (let i = 0; i < ingredients.length; i++) {
-  const liElements = document.createElement("li");
-  liElements.textContent = ingredients[i];
-  ul.appendChild(liElements);
-  console.log(liElements);
+  const liElement = document.createElement("li");
+  liElement.textContent = ingredients[i];
+  liElements.push(liElement);
 }
+ul.append(...liElements);
