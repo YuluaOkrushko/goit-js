@@ -2,13 +2,15 @@ import gallery from "./gallery-items.js";
 
 // RENDER GALLERY
 
-let htmlGallery = "";
-gallery.forEach((gall) => {
-  htmlGallery += `<li class="gallery__item"><a class="gallery__link" href="${gall.original}"
+let htmlGallery = gallery.reduce(
+  (htmlGallery, gall) =>
+    htmlGallery +
+    `<li class="gallery__item"><a class="gallery__link" href="${gall.original}"
 ><img class="gallery__image"
 src="${gall.preview}" data-source="${gall.original}" alt="${gall.description}"/>
-</a></li>`;
-});
+</a></li>`,
+  ""
+);
 
 const galleryList = document.querySelector(".gallery");
 galleryList.insertAdjacentHTML("afterbegin", htmlGallery);
