@@ -3,29 +3,34 @@ import '@pnotify/core/dist/BrightTheme.css';
 import { error } from '@pnotify/core';
 import fetchCountries from './fetchCountries.js';
 import debounce from 'lodash.debounce';
+import countryList from './templates/countries.hbs';
+import country from './templates/country.hbs';
 
-let input_text = document.querySelector('.input_text');
+let inputText = document.querySelector('.input_text');
 
 let search = async() => {
-    let promise = fetchCountries(input_text.value);
-    let result = await promise;
+    let result = await fetchCountries(inputText.value);
+    document.querySelector('.js-result').innerHTML = '';
     if (!result) {
-        error({
-            text: 'No Countries Found',
-            closer: false,
-            sticker: false,
-            destroy: true,
-            delay: 500,
-        });
-    }
-    if (result.length > 10) {
-        error({
-            text: 'Too many matches found. Please enter a more specific query!',
-            closer: false,
-            sticker: false,
-            destroy: true,
-            delay: 500,
-        });
+        showError('No Countries Found');
+    } else if (result.length > 10) {
+        showError('Too many matches found. Please enter a more specific query!');
+    } else if (result.length === 1) {
+        // выводим темплейт с одной страной
+        document.querySelector('.js-result').innerHTML = country(result[0]);
+    } else {
+        //выводим список стран
+        document.querySelector('.js-result').innerHTML = countryList(result);
     }
 };
-input_text.addEventListener('input', debounce(search, 500));
+const showError = text => {
+    error({
+        text: text,
+        closer: false,
+        sticker: false,
+        destroy: true,
+        delay: 500,
+    });
+};
+
+inputText.addEventListener('input', debounce(search, 500));
